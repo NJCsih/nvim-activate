@@ -1,0 +1,108 @@
+*nvim-activate*
+
+Authors:  Tom Kuson <mail@tjkuson.me>
+Version:  NA
+Homepage: <https://github.com/tjkuson/nvim-activate>
+
+==============================================================================
+INTRODUCTION                                                     *nvim-activate*
+
+A plugin to display reminder the bottom-right corner of the editor to
+activate Neovim.
+
+==============================================================================
+CONFIGURATION                                              *NvimActivate.config*
+
+This plugin is intentionally minimal and has no options.
+
+Use autocommands to control visibility in contexts (see
+|nvim-activate-recipes| and |nvim-activate-setup| section notes about
+|vim.b.nvimactivate_disable|).
+
+Note: calling |setup()| is not required to initialize the plugin.
+You can disable globally or per-buffer:
+>
+  vim.g.nvimactivate_disable = true
+  -- or
+  vim.b.nvimactivate_disable = true
+<
+
+==============================================================================
+COMMANDS                                                *nvim-activate-commands*
+
+The plugin provides these user commands:
+>
+  :NvimActivateShow
+  :NvimActivateHide
+  :NvimActivateToggle
+<
+
+==============================================================================
+RECIPES                                                  *nvim-activate-recipes*
+
+Hide after a delay on startup:
+
+Vimscript:
+>
+  autocmd VimEnter * ++once lua vim.defer_fn(function()
+    vim.g.nvimactivate_disable = true
+    require("nvim-activate").hide()
+  end, 1500)
+<
+
+Lua:
+>
+  vim.api.nvim_create_autocmd("VimEnter", {
+    once = true,
+    callback = function()
+      vim.defer_fn(function()
+        vim.g.nvimactivate_disable = true
+        require("nvim-activate").hide()
+      end, 1500)
+    end,
+  })
+<
+
+Hide during Insert mode, show on exit:
+
+Vimscript:
+>
+  autocmd InsertEnter * NvimActivateHide
+  autocmd InsertLeave * NvimActivateShow
+<
+
+Lua:
+>
+  vim.api.nvim_create_autocmd("InsertEnter", {
+    callback = function() require("nvim-activate").hide() end,
+  })
+  vim.api.nvim_create_autocmd("InsertLeave", {
+    callback = function() require("nvim-activate").show() end,
+  })
+<
+
+Enable only in specific filetypes (when globally disabled):
+
+Vimscript:
+>
+  let g:nvimactivate_disable = v:true
+  augroup NvimActivateExamples
+    autocmd!
+    autocmd FileType lua,python let b:nvimactivate_disable = v:false
+  augroup END
+<
+
+Lua:
+>
+  vim.g.nvimactivate_disable = true
+  local grp = vim.api.nvim_create_augroup("NvimActivateExamples", { clear = true })
+  vim.api.nvim_create_autocmd("FileType", {
+    group = grp,
+    pattern = { "lua", "python" },
+    callback = function()
+      vim.b.nvimactivate_disable = false
+    end,
+  })
+<
+------------------------------------------------------------------------------
+vim:tw=78:ts=8:ft=help:norl:
