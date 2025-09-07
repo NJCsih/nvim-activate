@@ -1,17 +1,17 @@
+*nvim-activate.txt*
 *nvim-activate*
+==============================================================================
+INTRODUCTION                                               *nvim-activate-intro*
+
+A plugin to display a reminder in the bottom-right corner of the editor to
+activate Neovim.
 
 Authors:  Tom Kuson <mail@tjkuson.me>
 Version:  NA
 Homepage: <https://github.com/tjkuson/nvim-activate>
 
 ==============================================================================
-INTRODUCTION                                                     *nvim-activate*
-
-A plugin to display reminder the bottom-right corner of the editor to
-activate Neovim.
-
-==============================================================================
-CONFIGURATION                                              *NvimActivate.config*
+CONFIGURATION                                             *nvim-activate-config*
 
 This plugin is intentionally minimal and has no options.
 
